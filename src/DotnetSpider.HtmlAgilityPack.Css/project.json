@@ -1,26 +1,26 @@
 {
-	"version": "0.0.9",
-	"buildOptions": {
-		"emitEntryPoint": false,
-		"debugType": "portable"
-	},
+  "version": "0.0.9.1-alpha",
+  "buildOptions": {
+    "emitEntryPoint": false,
+    "debugType": "portable"
+  },
   "dependencies": {
     "Microsoft.NETCore.App": {
       "type": "platform",
       "version": "1.0.0"
     },
-    "DotnetSpider.HtmlAgilityPack": "0.0.9"
+    "DotnetSpider.HtmlAgilityPack": "0.0.9.1-alpha"
   },
-	"frameworks": {
-		"netcoreapp1.0": {
-			"imports": "portable-net45+win8+dnxcore50",
-			"dependencies": {},
-			"buildOptions": {
-				"define": [
-					"NET_CORE",
-					"RELEASE"
-				]
-			}
-		}
-	}
+  "frameworks": {
+    "netcoreapp1.0": {
+      "imports": "portable-net45+win8+dnxcore50",
+      "dependencies": {},
+      "buildOptions": {
+        "define": [
+          "NET_CORE",
+          "RELEASE"
+        ]
+      }
+    }
+  }
 }

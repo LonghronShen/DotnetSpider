@@ -1,12 +1,12 @@
 {
-  "version": "0.0.9",
+  "version": "0.0.9.1-alpha",
   "buildOptions": {
     "emitEntryPoint": false,
     "debugType": "portable"
   },
   "dependencies": {
-    "DotnetSpider.Core": "0.0.9",
-    "DotnetSpider.Redial": "0.0.9",
+    "DotnetSpider.Core": "0.0.9.1-alpha",
+    "DotnetSpider.Redial": "0.0.9.1-alpha",
     "MongoDB.Driver": "2.3.0",
     "Newtonsoft.Json": "9.0.1"
   },
@@ -37,8 +37,8 @@
           "type": "platform",
           "version": "1.0.0"
         },
-        "DotnetSpider.HtmlAgilityPack": "0.0.9",
-        "DotnetSpider.HtmlAgilityPack.Css": "0.0.9",
+        "DotnetSpider.HtmlAgilityPack": "0.0.9.1-alpha",
+        "DotnetSpider.HtmlAgilityPack.Css": "0.0.9.1-alpha",
         "SapientGuardian.MySql.Data": "6.9.812",
         "System.Data.Common": "4.1.0",
         "Microsoft.CSharp": "4.0.1",

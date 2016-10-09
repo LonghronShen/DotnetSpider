@@ -1,5 +1,5 @@
 {
-  "version": "0.0.9",
+  "version": "0.0.9.1-alpha",
   "buildOptions": {
     "emitEntryPoint": false,
     "debugType": "portable"
@@ -39,8 +39,8 @@
         },
         "System.Net.Http": "4.1.0",
         "NLog": "4.4.0-betaV15",
-        "DotnetSpider.HtmlAgilityPack": "0.0.9",
-        "DotnetSpider.HtmlAgilityPack.Css": "0.0.9",
+        "DotnetSpider.HtmlAgilityPack": "0.0.9.1-alpha",
+        "DotnetSpider.HtmlAgilityPack.Css": "0.0.9.1-alpha",
         "System.Security.Cryptography.Algorithms": "4.2.0",
         "System.Security.Cryptography.Primitives": "4.0.0",
         "System.Threading.Thread": "4.0.0",
