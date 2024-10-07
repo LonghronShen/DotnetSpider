@@ -18,8 +18,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Quartz;
 using Quartz.AspNetCore;
-using Quartz.AspNetCore.MySqlConnector;
 using ServiceProvider = DotnetSpider.Portal.Common.ServiceProvider;
 
 namespace DotnetSpider.Portal
@@ -47,46 +47,84 @@ namespace DotnetSpider.Portal
             var options = new PortalOptions(Configuration);
 
             // Add DbContext
-            Action<DbContextOptionsBuilder> dbContextOptionsBuilder;
-            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
-            switch (options.DatabaseType?.ToLower())
+            services.AddDbContext<PortalDbContext>(setup =>
             {
-                case "mysql":
-                    {
-                        dbContextOptionsBuilder = b =>
-                            b.UseMySql(ServerVersion.AutoDetect(options.ConnectionString),
+                var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
+                switch (options.DatabaseType?.ToLower())
+                {
+                    case "mysql":
+                        {
+                            var serverVersion = ServerVersion.AutoDetect(options.ConnectionString);
+                            setup.UseMySql(options.ConnectionString, serverVersion,
+                                sql =>
+                                {
+                                    sql.MigrationsAssembly(migrationsAssembly);
+                                    sql.EnableRetryOnFailure();
+                                });
+                            break;
+                        }
+                    default:
+                        {
+                            setup.UseSqlServer(options.ConnectionString,
                                 sql => sql.MigrationsAssembly(migrationsAssembly));
-                        break;
-                    }
-
-                default:
-                    {
-                        dbContextOptionsBuilder = b =>
-                            b.UseSqlServer(options.ConnectionString,
-                                sql => sql.MigrationsAssembly(migrationsAssembly));
-                        break;
-                    }
-            }
-
-
-            services.AddDbContext<PortalDbContext>(dbContextOptionsBuilder);
-            services.AddQuartz(x =>
-            {
-                x.UseMySqlConnector(options.ConnectionString);
+                            break;
+                        }
+                }
             });
+
+
+            services.AddQuartz(setup =>
+            {
+                setup.UsePersistentStore(s =>
+                {
+                    s.UseProperties = true;
+
+                    switch (options.DatabaseType?.ToLower())
+                    {
+                        case "mysql":
+                            {
+                                s.UseMySql(options.ConnectionString);
+                                break;
+                            }
+
+                        case "postgresql":
+                            {
+                                s.UsePostgres(options.ConnectionString);
+                                break;
+                            }
+
+                        default:
+                            {
+                                s.UseSqlServer(options.ConnectionString);
+                                break;
+                            }
+                    }
+
+                    s.UseNewtonsoftJsonSerializer();
+                });
+            });
+
+            services.AddQuartzServer(options =>
+            {
+                // when shutting down we want jobs to complete gracefully
+                options.WaitForJobsToComplete = true;
+            });
+
             services.Configure<AgentCenterOptions>(Configuration);
             services.AddHttpClient();
             services.AddAgentCenterHostService<MySqlAgentStore>();
             services.AddStatisticHostService<MySqlStatisticStore>();
             services.AddRabbitMQ(Configuration);
-            services.AddHostedService<QuartzService>();
-            services.AddHostedService<CleanDockerContainerService>();
             services.AddSingleton<IActionResultTypeMapper, ActionResultTypeMapper>();
             services.AddRouting(x =>
             {
                 x.LowercaseUrls = true;
             });
             services.AddAutoMapper(typeof(AutoMapperProfile));
+
+            services.AddHostedService<SeedDataHostedLifecycleService>();
+            //services.AddHostedService<QuartzService>();
+            services.AddHostedService<CleanDockerContainerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -107,7 +145,7 @@ namespace DotnetSpider.Portal
                 // app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
@@ -122,11 +160,6 @@ namespace DotnetSpider.Portal
                     "default",
                     "{controller=Home}/{action=Index}/{id?}");
             });
-
-            SeedData.InitializeAsync(new PortalOptions(Configuration), app.ApplicationServices).GetAwaiter()
-                .GetResult();
-
-            app.UseQuartz(true);
         }
 
 

@@ -87,5 +87,159 @@
       "renameLocals": true
     },
     "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/lib/bootstrap/dist/css/bootstrap.css",
+    "inputFiles": [
+      "node_modules/bootstrap/dist/css/bootstrap.css"
+    ],
+    "minify": {
+      "enabled": false,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/lib/bootstrap/dist/css/bootstrap.min.css",
+    "inputFiles": [
+      "node_modules/bootstrap/dist/css/bootstrap.css"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": true
+  },
+  {
+    "outputFileName": "wwwroot/lib/select2/dist/css/select2.css",
+    "inputFiles": [
+      "node_modules/select2/dist/css/select2.css"
+    ],
+    "minify": {
+      "enabled": false,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/lib/select2/dist/css/select2.min.css",
+    "inputFiles": [
+      "node_modules/select2/dist/css/select2.css"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": true
+  },
+  {
+    "outputFileName": "wwwroot/lib/font-awesome/css/font-awesome.css",
+    "inputFiles": [
+      "node_modules/font-awesome/css/font-awesome.css"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/lib/icheck-bootstrap/icheck-bootstrap.css",
+    "inputFiles": [
+      "node_modules/icheck-bootstrap/icheck-bootstrap.css"
+    ],
+    "minify": {
+      "enabled": false,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/lib/icheck-bootstrap/icheck-bootstrap.min.css",
+    "inputFiles": [
+      "node_modules/icheck-bootstrap/icheck-bootstrap.css"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": true
+  },
+  {
+    "outputFileName": "wwwroot/lib/jquery/dist/jquery.min.js",
+    "inputFiles": [
+      "node_modules/jquery/dist/jquery.min.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/lib/bootstrap/dist/js/bootstrap.bundle.min.js",
+    "inputFiles": [
+      "node_modules/bootstrap/dist/js/bootstrap.bundle.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/lib/select2/dist/js/select2.full.min.js",
+    "inputFiles": [
+      "node_modules/select2/dist/js/select2.full.min.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/lib/vue/dist/vue.min.js",
+    "inputFiles": [
+      "node_modules/vue/dist/vue.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/node_modules/font-awesome/fonts/fontawesome-webfont.woff2",
+    "inputFiles": [
+      "node_modules/font-awesome/fonts/fontawesome-webfont.woff2"
+    ],
+    "minify": {
+      "enabled": false,
+      "renameLocals": false
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/node_modules/font-awesome/fonts/fontawesome-webfont.woff",
+    "inputFiles": [
+      "node_modules/font-awesome/fonts/fontawesome-webfont.woff"
+    ],
+    "minify": {
+      "enabled": false,
+      "renameLocals": false
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/node_modules/font-awesome/fonts/fontawesome-webfont.ttf",
+    "inputFiles": [
+      "node_modules/font-awesome/fonts/fontawesome-webfont.ttf"
+    ],
+    "minify": {
+      "enabled": false,
+      "renameLocals": false
+    },
+    "sourceMap": false
   }
 ]

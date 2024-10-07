@@ -23,19 +23,22 @@ namespace DotnetSpider.Portal.Controllers.API
     {
         private readonly ILogger _logger;
         private readonly PortalDbContext _dbContext;
-        private readonly IScheduler _sched;
         private readonly IMessageQueue _mq;
         private readonly IMapper _mapper;
+        private readonly ISchedulerFactory _schedulerFactory;
 
-        public SpiderController(PortalDbContext dbContext,
-            IScheduler sched,
-            ILogger<SpiderController> logger, IMessageQueue mq, IMapper mapper)
+        public SpiderController(
+            PortalDbContext dbContext,
+            ISchedulerFactory schedulerFactory,
+            ILogger<SpiderController> logger,
+            IMessageQueue mq,
+            IMapper mapper)
         {
             _logger = logger;
             _mq = mq;
             _mapper = mapper;
             _dbContext = dbContext;
-            _sched = sched;
+            _schedulerFactory = schedulerFactory;
         }
 
         [HttpPost]
@@ -109,7 +112,9 @@ namespace DotnetSpider.Portal.Controllers.API
                 if (reSched)
                 {
                     var jobId = id.ToString();
-                    var deleted = await _sched.DeleteJob(new JobKey(jobId));
+
+                    var scheduler = await this._schedulerFactory.GetScheduler();
+                    var deleted = await scheduler.DeleteJob(new JobKey(jobId));
                     if (!deleted)
                     {
                         throw new ApplicationException("Delete quartz job failed");
@@ -153,7 +158,8 @@ namespace DotnetSpider.Portal.Controllers.API
         {
             try
             {
-                await _sched.TriggerJob(new JobKey(id.ToString()));
+                var scheduler = await this._schedulerFactory.GetScheduler();
+                await scheduler.TriggerJob(new JobKey(id.ToString()));
                 return true;
             }
             catch (Exception e)
@@ -277,7 +283,8 @@ namespace DotnetSpider.Portal.Controllers.API
                 .Build();
             var qzJob = JobBuilder.Create<QuartzJob>().WithIdentity(id).WithDescription(name)
                 .RequestRecovery(true).Build();
-            await _sched.ScheduleJob(qzJob, trigger);
+            var scheduler = await this._schedulerFactory.GetScheduler();
+            await scheduler.ScheduleJob(qzJob, trigger);
         }
     }
 }
