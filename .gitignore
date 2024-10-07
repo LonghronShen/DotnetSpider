@@ -376,3 +376,4 @@ $RECYCLE.BIN/
 # Wechat App
 miniprogram_npm/
 
+appsettings.migration.json

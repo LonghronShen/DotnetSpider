@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using DotnetSpider.Infrastructure;
 
 namespace DotnetSpider.Portal.Common
 {
-	public class OrderCondition<TEntity, TKey>
+    public class OrderCondition<TEntity, TKey>
 	{
 		public Expression<Func<TEntity, TKey>> Expression { get; }
 		public bool Desc { get; }
@@ -95,7 +95,7 @@ namespace DotnetSpider.Portal.Common
 
 			var total = entities.Count();
 			var data = total == 0 ? new List<TEntity>() : entities.Skip((page - 1) * limit).Take(limit).ToList();
-			return Task.FromResult(new PagedResult<TEntity>(page, limit, total, data));
+			return Task.FromResult(data.ToPagedResult<TEntity>(page, limit, total));
 		}
 	}
 }
