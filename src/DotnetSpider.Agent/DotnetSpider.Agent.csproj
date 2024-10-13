@@ -1,5 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8</TargetFramework>
@@ -8,15 +7,22 @@
   <Import Project="../../package.props" />
 
   <ItemGroup>
-    <ProjectReference Include="..\DotnetSpider.RabbitMQ\DotnetSpider.RabbitMQ.csproj" />
-    <ProjectReference Include="..\DotnetSpider\DotnetSpider.csproj" />
+    <None Remove="appsettings.Development.json" />
+    <None Remove="appsettings.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="appsettings.json">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    <Content Include="appsettings.Development.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DotnetSpider.RabbitMQ\DotnetSpider.RabbitMQ.csproj" />
+    <ProjectReference Include="..\DotnetSpider\DotnetSpider.csproj" />
   </ItemGroup>
 
   <ItemGroup>

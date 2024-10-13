@@ -1,9 +1,7 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
-using DotnetSpider.Downloader;
 using DotnetSpider.RabbitMQ;
 using DotnetSpider.Statistic;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Serilog;

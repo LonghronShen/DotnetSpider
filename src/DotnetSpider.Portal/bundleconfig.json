@@ -17,12 +17,6 @@
     "sourceMap": false
   },
   {
-    "outputFileName": "wwwroot/css/sweetalert.min.css",
-    "inputFiles": [
-      "wwwroot/css/sweetalert.css"
-    ]
-  },
-  {
     "outputFileName": "wwwroot/js/pagination.min.js",
     "inputFiles": [
       "wwwroot/js/pagination.js"
@@ -87,5 +81,5 @@
       "renameLocals": true
     },
     "sourceMap": false
-  }
+  },
 ]

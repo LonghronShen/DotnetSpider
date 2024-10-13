@@ -7,25 +7,29 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="appsettings.migration.json" />
-  </ItemGroup>
-
-
-  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
-    <PackageReference Include="Docker.DotNet" Version="3.125.4" />
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.0" />
-    <PackageReference Include="Quartz.AspNetCore" Version="1.0.4" />
-    <PackageReference Include="Quartz.AspNetCore.MySqlConnector" Version="1.0.4" />
+    <PackageReference Include="Docker.DotNet" Version="3.125.15" />
+
+    <PackageReference Include="Quartz.AspNetCore" Version="3.13.0" />
+    <PackageReference Include="Quartz.Serialization.Json" Version="3.13.0" />
+
     <PackageReference Include="Serilog.AspNetCore" Version="6.0.1" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
-    <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
     <PackageReference Include="Serilog.Sinks.PeriodicBatching" Version="2.3.1" />
+    <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
+
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.4.5" />
     <PackageReference Include="System.Text.Json" Version="8.0.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.8" />
+
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.8" />
+    <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
+
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.8" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.8" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
       <PrivateAssets>all</PrivateAssets>
@@ -37,14 +41,13 @@
     </PackageReference>
   </ItemGroup>
 
-
   <ItemGroup>
-
+    <ProjectReference Include="..\DotnetSpider.HBase\DotnetSpider.HBase.csproj" />
+    <ProjectReference Include="..\DotnetSpider.Mongo\DotnetSpider.Mongo.csproj" />
     <ProjectReference Include="..\DotnetSpider.MySql\DotnetSpider.MySql.csproj" />
-
+    <ProjectReference Include="..\DotnetSpider.PostgreSql\DotnetSpider.PostgreSql.csproj" />
     <ProjectReference Include="..\DotnetSpider.RabbitMQ\DotnetSpider.RabbitMQ.csproj" />
   </ItemGroup>
-
 
   <ItemGroup>
     <Content Update="appsettings.json">
@@ -54,18 +57,19 @@
     </Content>
   </ItemGroup>
 
-
   <ItemGroup>
+    <None Remove="DDL\PostgreSQL.sql" />
+    <None Remove="DDL\Sqlite.sql" />
     <None Remove="DDL\SqlServer.sql" />
+    <EmbeddedResource Include="DDL\PostgreSQL.sql" />
+    <EmbeddedResource Include="DDL\Sqlite.sql" />
     <EmbeddedResource Include="DDL\SqlServer.sql" />
     <None Remove="DDL\MySql.sql" />
     <EmbeddedResource Include="DDL\MySql.sql" />
   </ItemGroup>
 
-
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\DockerRepository\Add.cshtml" />
     <_ContentIncludedByDefault Remove="Views\DockerRepository\Index.cshtml" />
   </ItemGroup>
-
 </Project>

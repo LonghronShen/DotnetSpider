@@ -22,7 +22,7 @@ $(function () {
                     that.limit = result.data.limit;
                     that.count = result.data.count;
                     that.items = [];
-                    result.data.data.forEach(x => {
+                    result.data.queryable.forEach(x => {
                         that.items.push(x);
                     });
                 });

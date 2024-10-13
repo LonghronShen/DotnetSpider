@@ -46,13 +46,13 @@ public class AgentHeartbeat
     [Column("creation_time")]
     public DateTimeOffset CreationTime { get; private set; }
 
-    public AgentHeartbeat(string agentId, string agentName, long freeMemory, int cpuLoad)
+    public AgentHeartbeat(string agentId, string agentName, long availableMemory, int cpuLoad)
     {
         agentId.NotNullOrWhiteSpace(nameof(agentId));
 
         AgentId = agentId;
         AgentName = agentName;
-        AvailableMemory = freeMemory;
+        AvailableMemory = availableMemory;
         CpuLoad = cpuLoad;
         CreationTime = DateTimeOffset.Now;
     }

@@ -23,19 +23,22 @@ namespace DotnetSpider.Portal.Controllers.API
     {
         private readonly ILogger _logger;
         private readonly PortalDbContext _dbContext;
-        private readonly IScheduler _sched;
         private readonly IMessageQueue _mq;
         private readonly IMapper _mapper;
+        private readonly ISchedulerFactory _schedulerFactory;
 
-        public SpiderController(PortalDbContext dbContext,
-            IScheduler sched,
-            ILogger<SpiderController> logger, IMessageQueue mq, IMapper mapper)
+        public SpiderController(
+            PortalDbContext dbContext,
+            ISchedulerFactory schedulerFactory,
+            ILogger<SpiderController> logger,
+            IMessageQueue mq,
+            IMapper mapper)
         {
             _logger = logger;
             _mq = mq;
             _mapper = mapper;
             _dbContext = dbContext;
-            _sched = sched;
+            _schedulerFactory = schedulerFactory;
         }
 
         [HttpPost]
@@ -109,7 +112,9 @@ namespace DotnetSpider.Portal.Controllers.API
                 if (reSched)
                 {
                     var jobId = id.ToString();
-                    var deleted = await _sched.DeleteJob(new JobKey(jobId));
+
+                    var scheduler = await this._schedulerFactory.GetScheduler();
+                    var deleted = await scheduler.DeleteJob(new JobKey(jobId));
                     if (!deleted)
                     {
                         throw new ApplicationException("Delete quartz job failed");
@@ -153,7 +158,8 @@ namespace DotnetSpider.Portal.Controllers.API
         {
             try
             {
-                await _sched.TriggerJob(new JobKey(id.ToString()));
+                var scheduler = await this._schedulerFactory.GetScheduler();
+                await scheduler.TriggerJob(new JobKey(id.ToString()));
                 return true;
             }
             catch (Exception e)
@@ -229,7 +235,7 @@ namespace DotnetSpider.Portal.Controllers.API
             var pagedQueryResult = await _dbContext.SpiderHistories.PagedQueryAsync(page, limit, x => x.SpiderId == id,
                 new OrderCondition<SpiderHistory, int>(x => x.Id));
             var @out = _mapper.ToPagedQueryResult<SpiderHistory, SpiderHistoryViewObject>(pagedQueryResult);
-            var batches = @out.Queryable.Select(x => x.Batch);
+            var batches = @out.Queryable.Select(x => x.Batch).ToList();
             var dict = await _dbContext.Set<SpiderStatistic>().Where(x => batches.Contains(x.Id))
                 .ToDictionaryAsync(x => x.Id, x => x);
             foreach (var item in @out.Queryable)
@@ -277,7 +283,8 @@ namespace DotnetSpider.Portal.Controllers.API
                 .Build();
             var qzJob = JobBuilder.Create<QuartzJob>().WithIdentity(id).WithDescription(name)
                 .RequestRecovery(true).Build();
-            await _sched.ScheduleJob(qzJob, trigger);
+            var scheduler = await this._schedulerFactory.GetScheduler();
+            await scheduler.ScheduleJob(qzJob, trigger);
         }
     }
 }

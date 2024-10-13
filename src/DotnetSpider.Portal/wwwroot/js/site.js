@@ -166,3 +166,7 @@ function getQueryParam() {
         keyword: keyword,
     };
 }
+
+function swal(config) {
+    Swal.fire(config);
+}

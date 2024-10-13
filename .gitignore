@@ -377,3 +377,4 @@ $RECYCLE.BIN/
 miniprogram_npm/
 
 appsettings.migration.json
+appsettings.Development.json
