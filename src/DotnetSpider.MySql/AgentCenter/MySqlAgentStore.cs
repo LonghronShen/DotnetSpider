@@ -18,7 +18,7 @@ public class MySqlAgentStore(IOptions<AgentCenterOptions> options) : IAgentStore
         await conn.ExecuteAsync(
             $"CREATE SCHEMA IF NOT EXISTS {_options.Database} DEFAULT CHARACTER SET utf8mb4;");
         var sql1 =
-            $"create table if not exists {_options.Database}.agent (id varchar(36) primary key, `name` varchar(255) null, processor_count int null, total_memory int null, is_deleted tinyint(1) default 0 null, creation_time timestamp default CURRENT_TIMESTAMP not null, last_modification_time timestamp default CURRENT_TIMESTAMP not null, key NAME_INDEX (`name`));";
+            $"create table if not exists {_options.Database}.agent (id varchar(36) primary key, `name` varchar(255) null, processor_count int null, total_memory int null, deleted tinyint(1) default 0 null, creation_time timestamp default CURRENT_TIMESTAMP not null, last_modification_time timestamp default CURRENT_TIMESTAMP not null, key NAME_INDEX (`name`));";
         var sql2 =
             $"create table if not exists {_options.Database}.agent_heartbeat(id bigint AUTO_INCREMENT primary key, agent_id varchar(36) not null, `agent_name` varchar(255) null, cpu_load int, available_memory int null, creation_time timestamp default CURRENT_TIMESTAMP not null, key NAME_INDEX (`agent_name`), key ID_INDEX (`agent_id`));";
         await conn.ExecuteAsync(sql1);

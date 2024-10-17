@@ -46,40 +46,47 @@ public class AgentCenterHostService(
                     return;
                 }
 
-                switch (message)
+                try
                 {
-                    case Messages.Agent.Register register:
+                    switch (message)
                     {
-                        if (_distributed)
-                        {
-                            logger.LogInformation("Register agent: {AgentId} - {AgentName}", register.AgentId,
-                                register.AgentName);
-                        }
+                        case Messages.Agent.Register register:
+                            {
+                                if (_distributed)
+                                {
+                                    logger.LogInformation("Register agent: {AgentId} - {AgentName}", register.AgentId,
+                                        register.AgentName);
+                                }
 
-                        await agentStore.RegisterAsync(new AgentInfo(register.AgentId, register.AgentName,
-                            register.ProcessorCount,
-                            register.Memory));
-                        break;
-                    }
-                    case Messages.Agent.Heartbeat heartbeat:
-                    {
-                        if (_distributed)
-                        {
-                            logger.LogInformation(
-                                "Receive heartbeat: {AgentId} - {AgentName}",
-                                heartbeat.AgentId, heartbeat.AgentName);
-                        }
+                                await agentStore.RegisterAsync(new AgentInfo(register.AgentId, register.AgentName,
+                                    register.ProcessorCount,
+                                    register.Memory));
+                                break;
+                            }
+                        case Messages.Agent.Heartbeat heartbeat:
+                            {
+                                if (_distributed)
+                                {
+                                    logger.LogInformation(
+                                        "Receive heartbeat: {AgentId} - {AgentName}",
+                                        heartbeat.AgentId, heartbeat.AgentName);
+                                }
 
-                        await agentStore.HeartbeatAsync(new AgentHeartbeat(heartbeat.AgentId, heartbeat.AgentName,
-                            heartbeat.AvailableMemory, heartbeat.CpuLoad));
-                        break;
+                                await agentStore.HeartbeatAsync(new AgentHeartbeat(heartbeat.AgentId, heartbeat.AgentName,
+                                    heartbeat.AvailableMemory, heartbeat.CpuLoad));
+                                break;
+                            }
+                        default:
+                            {
+                                var msg = JsonSerializer.Serialize(message);
+                                logger.LogWarning("Message not supported: {Message}", msg);
+                                break;
+                            }
                     }
-                    default:
-                    {
-                        var msg = JsonSerializer.Serialize(message);
-                        logger.LogWarning("Message not supported: {Message}", msg);
-                        break;
-                    }
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "Handle message failed");
                 }
             };
             await messageQueue.ConsumeAsync(_consumer);
