@@ -32,13 +32,13 @@ public class AgentHeartbeat
     /// 空闲内存
     /// </summary>
     [Column("available_memory")]
-    public long AvailableMemory { get; private set; }
+    public long? AvailableMemory { get; private set; }
 
     /// <summary>
     /// CPU 负载
     /// </summary>
     [Column("cpu_load")]
-    public int CpuLoad { get; private set; }
+    public int? CpuLoad { get; private set; }
 
     /// <summary>
     /// 上报时间
@@ -46,7 +46,7 @@ public class AgentHeartbeat
     [Column("creation_time")]
     public DateTimeOffset CreationTime { get; private set; }
 
-    public AgentHeartbeat(string agentId, string agentName, long availableMemory, int cpuLoad)
+    public AgentHeartbeat(string agentId, string agentName, long? availableMemory, int? cpuLoad)
     {
         agentId.NotNullOrWhiteSpace(nameof(agentId));
 

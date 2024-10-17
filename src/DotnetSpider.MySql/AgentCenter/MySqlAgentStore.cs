@@ -36,8 +36,8 @@ public class MySqlAgentStore(IOptions<AgentCenterOptions> options) : IAgentStore
     {
         await using var conn = new MySqlConnection(_options.ConnectionString);
         await conn.ExecuteAsync(
-            $"INSERT IGNORE INTO {_options.Database}.agent (id, `name`, processor_count, total_memory, creation_time, last_modification_time) VALUES (@Id, @Name, @ProcessorCount, @TotalMemory, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP); UPDATE {_options.Database}.agent SET is_deleted = false WHERE id = @Id",
-            new {agent.Id, agent.Name, agent.ProcessorCount, agent.TotalMemory});
+            $"INSERT IGNORE INTO {_options.Database}.agent (id, `name`, processor_count, total_memory, creation_time, last_modification_time) VALUES (@Id, @Name, @ProcessorCount, @TotalMemory, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP); UPDATE {_options.Database}.agent SET deleted = false WHERE id = @Id",
+            new { agent.Id, agent.Name, agent.ProcessorCount, agent.TotalMemory });
     }
 
     public async Task HeartbeatAsync(AgentHeartbeat heartbeat)
@@ -45,9 +45,9 @@ public class MySqlAgentStore(IOptions<AgentCenterOptions> options) : IAgentStore
         await using var conn = new MySqlConnection(_options.ConnectionString);
         await conn.ExecuteAsync(
             $"INSERT IGNORE INTO {_options.Database}.agent_heartbeat (agent_id, agent_name, available_memory, cpu_load, creation_time) VALUES (@AgentId, @AgentName, @FreeMemory, @CpuLoad, CURRENT_TIMESTAMP);",
-            new {heartbeat.AgentId, heartbeat.AgentName, heartbeat.AvailableMemory, heartbeat.CpuLoad});
+            new { heartbeat.AgentId, heartbeat.AgentName, FreeMemory = heartbeat.AvailableMemory, heartbeat.CpuLoad });
         await conn.ExecuteAsync(
             $"UPDATE {_options.Database}.agent SET last_modification_time = CURRENT_TIMESTAMP WHERE id = @AgentId",
-            new {heartbeat.AgentId,});
+            new { heartbeat.AgentId, });
     }
 }
