@@ -1,0 +1,105 @@
+name: Publish NuGet Pacakges
+
+on:
+  push:
+    branches: [master, develop]
+  pull_request:
+    branches: [master, develop]
+
+jobs:
+  # test:
+  #   runs-on: ubuntu-latest
+
+  #   services:
+  #     postgres:
+  #       image: postgres
+
+  #       env:
+  #         POSTGRES_PASSWORD: postgres
+  #         POSTGRES_USER: postgres
+  #         POSTGRES_DB: postgres
+
+  #       options: >-
+  #         --health-cmd pg_isready
+  #         --health-interval 10s
+  #         --health-timeout 5s
+  #         --health-retries 5
+  #       ports:
+  #         - 5432:5432
+
+  #     redis:
+  #       image: redis
+  #       options: >-
+  #           --health-cmd "redis-cli ping"
+  #           --health-interval 10s
+  #           --health-timeout 5s
+  #           --health-retries 5
+
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0
+
+  #     - name: Setup .NET Core @ Latest
+  #       uses: actions/setup-dotnet@v3
+  #       with:
+  #         source-url: https://nuget.pkg.github.com/${{github.repository_owner}}/index.json
+  #         dotnet-version: 8.0.x
+  #       env:
+  #         NUGET_AUTH_TOKEN: ${{ github.token }}
+
+  #     - name: Install dependencies
+  #       run: |
+  #           apt update
+  #           apt install -y jq
+  #           dotnet restore
+
+  #     - name: Test DotnetSpider
+  #       run: |
+  #           cd ./src/DotnetSpider.Tests
+
+  #           dotnet test --no-restore --verbosity normal
+
+  build:
+    runs-on: ubuntu-latest
+    # needs: [test]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Setup .NET Core @ Latest
+        uses: actions/setup-dotnet@v3
+        with:
+          source-url: https://nuget.pkg.github.com/${{github.repository_owner}}/index.json
+          dotnet-version: 8.0.x
+        env:
+          NUGET_AUTH_TOKEN: ${{ github.token }}
+
+      - name: Install dependencies
+        run: dotnet restore
+
+      - name: Build DotnetSpider
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: DotnetSpider.nupkgs
+          path: src/**/*.nupkg
+
+      - name: Push generated package to GitHub registry
+        shell: bash
+        run: find . -name '*.nupkg' | xargs -i dotnet nuget push --skip-duplicate {}
+        env:
+          NUGET_AUTH_TOKEN: ${{ github.token }}
+
+      # - name: Push generated package to NuGet.org
+      #   shell: bash
+      #   run: find . -name '*.nupkg' | xargs -i dotnet nuget push --skip-duplicate -s "https://api.nuget.org/v3/index.json" -k "$NUGET_AUTH_TOKEN" {}
+      #   env:
+      #     NUGET_AUTH_TOKEN: ${{ secrets.NUGET_API_KEY }}

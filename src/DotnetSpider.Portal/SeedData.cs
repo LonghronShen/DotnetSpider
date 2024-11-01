@@ -60,7 +60,7 @@ namespace DotnetSpider.Portal
                         )
                         {
                             sqlStream = typeof(SeedData).Assembly
-                                .GetManifestResourceStream("DotnetSpider.Portal.DDL.PostgreSQL.sql");
+                                .GetManifestResourceStream("DotnetSpider.Portal.DDL.Sqlite.sql");
                         }
 
                         break;

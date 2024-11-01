@@ -116,7 +116,7 @@ public abstract class Spider :
         return new SpiderId(id, name);
     }
 
-    protected IDataFlow GetDefaultStorage()
+    protected virtual IDataFlow GetDefaultStorage()
     {
         return StorageUtilities.CreateStorage(Options.StorageType, _services.Configuration);
     }
